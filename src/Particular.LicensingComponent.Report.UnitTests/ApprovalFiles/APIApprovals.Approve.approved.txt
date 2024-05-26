@@ -1,0 +1,80 @@
+namespace Particular.LicensingComponent.Report
+{
+    public class AuditServicesData : System.IEquatable<Particular.LicensingComponent.Report.AuditServicesData>
+    {
+        public AuditServicesData(System.Collections.Generic.Dictionary<string, int> Versions, System.Collections.Generic.Dictionary<string, int> Transports) { }
+        public System.Collections.Generic.Dictionary<string, int> Transports { get; init; }
+        public System.Collections.Generic.Dictionary<string, int> Versions { get; init; }
+    }
+    public class DailyThroughput : System.IEquatable<Particular.LicensingComponent.Report.DailyThroughput>
+    {
+        public DailyThroughput() { }
+        public System.DateOnly DateUTC { get; init; }
+        public long MessageCount { get; init; }
+    }
+    public class EnvironmentInformation : System.IEquatable<Particular.LicensingComponent.Report.EnvironmentInformation>
+    {
+        public EnvironmentInformation() { }
+        public Particular.LicensingComponent.Report.AuditServicesData AuditServicesData { get; set; }
+        public System.Collections.Generic.Dictionary<string, string> EnvironmentData { get; set; }
+    }
+    public class NoPrivateKeyException : System.Exception
+    {
+        public string ReportId { get; }
+    }
+    public class QueueThroughput : System.IEquatable<Particular.LicensingComponent.Report.QueueThroughput>
+    {
+        public QueueThroughput() { }
+        public string QueueName { get; set; }
+        public long? Throughput { get; set; }
+        public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromAudit { get; init; }
+        public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromBroker { get; init; }
+        public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromMonitoring { get; init; }
+        public string[] EndpointIndicators { get; init; }
+        public bool NoDataOrSendOnly { get; init; }
+        public string Scope { get; init; }
+        public string? UserIndicator { get; init; }
+    }
+    public class Report : System.IEquatable<Particular.LicensingComponent.Report.Report>
+    {
+        public Report() { }
+        public Particular.LicensingComponent.Report.EnvironmentInformation EnvironmentInformation { get; set; }
+        public System.TimeSpan ReportDuration { get; set; }
+        public System.DateTimeOffset StartTime { get; set; }
+        public string CustomerName { get; init; }
+        public System.DateTimeOffset EndTime { get; init; }
+        public string[] IgnoredQueues { get; init; }
+        public string MessageTransport { get; init; }
+        public string? Prefix { get; init; }
+        public Particular.LicensingComponent.Report.QueueThroughput[] Queues { get; init; }
+        public string ReportMethod { get; init; }
+        public string ScopeType { get; init; }
+        public string? ToolType { get; init; }
+        public string ToolVersion { get; init; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
+        public int TotalQueues { get; init; }
+        [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
+        public long TotalThroughput { get; init; }
+    }
+    public class ReportValidationResult
+    {
+        public ReportValidationResult(Particular.LicensingComponent.Report.SignedReport signedReport) { }
+        public bool IsValid { get; }
+        public string ReportId { get; }
+    }
+    public static class SerializationOptions
+    {
+        public static readonly System.Text.Json.JsonSerializerOptions IndentedWithNoEscaping;
+        public static readonly System.Text.Json.JsonSerializerOptions NotIndentedWithNoEscaping;
+    }
+    public static class Signature
+    {
+        public static string SignReport(Particular.LicensingComponent.Report.Report report) { }
+    }
+    public class SignedReport : System.IEquatable<Particular.LicensingComponent.Report.SignedReport>
+    {
+        public SignedReport() { }
+        public Particular.LicensingComponent.Report.Report ReportData { get; init; }
+        public string Signature { get; init; }
+    }
+}
