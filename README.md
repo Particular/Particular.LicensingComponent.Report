@@ -13,8 +13,6 @@ This package is deploted to feedz and is currently used in:
 
 To deploy a new version of the nuget package, tag the master branch with a new version number.
 
-> [!NOTE]  
-> Tagging the branch will **not** create a new Tools website deployment.
 
 ## Environment variables
 
