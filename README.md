@@ -11,8 +11,7 @@ This package is deploted to feedz and is currently used in:
 
 ### Particular.LicensingComponent.Report nuget
 
-To deploy a new version of the nuget package, tag the master branch with a new version number.
-
+To deploy a new version of the nuget package, tag the main branch with a new version number.
 
 ## Environment variables
 
