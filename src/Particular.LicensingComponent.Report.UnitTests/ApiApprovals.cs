@@ -6,7 +6,7 @@ using Particular.LicensingComponent.Report;
 using PublicApiGenerator;
 
 [TestFixture]
-public class APIApprovals
+public class ApiApprovals
 {
     [Test]
     public void Approve()
