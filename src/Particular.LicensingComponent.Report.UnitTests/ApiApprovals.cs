@@ -15,14 +15,7 @@ public class APIApprovals
         {
             ExcludeAttributes = new[] { "System.Runtime.Versioning.TargetFrameworkAttribute", "System.Reflection.AssemblyMetadataAttribute" }
         });
-        try
-        {
-            Approver.Verify(publicApi);
-        }
-        catch (Exception)
-        {
-            Console.WriteLine(publicApi);
-            throw;
-        }
+
+        Approver.Verify(publicApi);
     }
 }
