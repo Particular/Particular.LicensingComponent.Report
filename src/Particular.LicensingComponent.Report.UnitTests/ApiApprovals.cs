@@ -6,7 +6,7 @@ using Particular.LicensingComponent.Report;
 using PublicApiGenerator;
 
 [TestFixture]
-public class APIApprovals
+public class ApiApprovals
 {
     [Test]
     public void Approve()
@@ -15,6 +15,7 @@ public class APIApprovals
         {
             ExcludeAttributes = new[] { "System.Runtime.Versioning.TargetFrameworkAttribute", "System.Reflection.AssemblyMetadataAttribute" }
         });
+
         Approver.Verify(publicApi);
     }
 }
