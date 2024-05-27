@@ -1,6 +1,8 @@
 ## About this package
 
-This NuGet package is used by Particular to manage the throughput report data contract, serialization and validation required for NServiceBus licensing purposes.
+This NuGet package is part of the [Particular Service Platform](https://particular.net/service-platform), which includes [NServiceBus](https://particular.net/nservicebus) and tools to build, monitor, and debug distributed systems.
+
+Click the **Project website** link in the NuGet sidebar to access specific documentation for this package.
 
 ## About NServiceBus
 
