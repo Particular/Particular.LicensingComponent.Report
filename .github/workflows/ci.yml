@@ -21,14 +21,7 @@ jobs:
       - name: Run tests
         uses: Particular/run-tests-action@v1.7.0
         env:
-          THROUGHPUT_REPORT_PRIVATEKEY_PEM: ${{ secrets.THROUGHPUT_REPORT_PRIVATEKEY_PEM }}
-      - name: Sign NuGet packages
-        uses: Particular/sign-nuget-packages-action@v1.0.0
-        with:
-          client-id: ${{ secrets.AZURE_KEY_VAULT_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_KEY_VAULT_TENANT_ID }}
-          client-secret: ${{ secrets.AZURE_KEY_VAULT_CLIENT_SECRET }}
-          certificate-name: ${{ secrets.AZURE_KEY_VAULT_CERTIFICATE_NAME }}
+          THROUGHPUT_REPORT_PRIVATEKEY_PEM: ${{ secrets.THROUGHPUT_REPORT_PRIVATEKEY_PEM }}     
       - name: Publish artifacts
         uses: actions/upload-artifact@v4.3.3
         with:
