@@ -23,7 +23,7 @@ jobs:
         env:
           THROUGHPUT_REPORT_PRIVATEKEY_PEM: ${{ secrets.THROUGHPUT_REPORT_PRIVATEKEY_PEM }}     
       - name: Publish artifacts
-        uses: actions/upload-artifact@v4.4.2
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: nugets
           path: nugets/*
