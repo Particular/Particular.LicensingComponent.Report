@@ -10,17 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="public-key.pem" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="public-key.pem" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-    <PackageReference Include="Particular.Packaging" Version="4.2.0" PrivateAssets="All">
-    </PackageReference>
+    <PackageReference Include="Particular.Packaging" Version="4.2.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="public-key.pem" />
+    <EmbeddedResource Include="public-key.pem" />
   </ItemGroup>
 
 </Project>

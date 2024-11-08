@@ -23,8 +23,7 @@ public class LicensingComponent_Report_Signature_Tests
         var reportString = JsonSerializer.Serialize(report, SerializationOptions.IndentedWithNoEscaping);
 
         //Assert
-        Approver.Verify(reportString,
-            scrubber: input => input.Replace(report.Signature, "SIGNATURE"));
+        Approver.Verify(reportString, scrubber: input => input.Replace(report.Signature, "SIGNATURE"));
     }
 
     [Test]
