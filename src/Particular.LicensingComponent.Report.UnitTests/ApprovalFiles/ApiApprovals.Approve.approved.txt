@@ -25,6 +25,7 @@ namespace Particular.LicensingComponent.Report
     public class QueueThroughput : System.IEquatable<Particular.LicensingComponent.Report.QueueThroughput>
     {
         public QueueThroughput() { }
+        public string NameHash { get; set; }
         public string QueueName { get; set; }
         public long? Throughput { get; set; }
         public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromAudit { get; init; }
