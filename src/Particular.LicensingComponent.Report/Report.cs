@@ -117,6 +117,14 @@ public record QueueThroughput
     public string QueueName { get; set; }
 
     /// <summary>
+    /// A hash of the queue name to support unique identification of queues across reports without exposing potentially sensitive information.
+    /// </summary>
+    /// <remarks>
+    /// This should be a one-way hash of the unmasked queue name.
+    /// </remarks>
+    public string NameHash { get; set; }
+
+    /// <summary>
     /// Queue max daily throughput
     /// </summary>
     public long? Throughput { get; set; }
