@@ -79,3 +79,15 @@ namespace Particular.LicensingComponent.Report
         public string Signature { get; init; }
     }
 }
+namespace Particular.LicensingComponent.Report.Utility
+{
+    public class Masker
+    {
+        public Masker(string[] wordsToMask) { }
+        public string Mask(string stringToMask) { }
+    }
+    public static class OneWayHasher
+    {
+        public static string CalculateOneWayHash(string input) { }
+    }
+}
