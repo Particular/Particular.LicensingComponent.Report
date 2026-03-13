@@ -25,31 +25,31 @@ namespace Particular.LicensingComponent.Report
     public class QueueThroughput : System.IEquatable<Particular.LicensingComponent.Report.QueueThroughput>
     {
         public QueueThroughput() { }
-        public string NameHash { get; set; }
-        public string QueueName { get; set; }
-        public long? Throughput { get; set; }
         public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromAudit { get; init; }
         public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromBroker { get; init; }
         public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromMonitoring { get; init; }
         public string[] EndpointIndicators { get; init; }
+        public string NameHash { get; set; }
         public bool NoDataOrSendOnly { get; init; }
+        public string QueueName { get; set; }
         public string Scope { get; init; }
+        public long? Throughput { get; set; }
         public string? UserIndicator { get; init; }
     }
     public class Report : System.IEquatable<Particular.LicensingComponent.Report.Report>
     {
         public Report() { }
-        public Particular.LicensingComponent.Report.EnvironmentInformation EnvironmentInformation { get; set; }
-        public System.TimeSpan ReportDuration { get; set; }
-        public System.DateTimeOffset StartTime { get; set; }
         public string CustomerName { get; init; }
         public System.DateTimeOffset EndTime { get; init; }
+        public Particular.LicensingComponent.Report.EnvironmentInformation EnvironmentInformation { get; set; }
         public string[] IgnoredQueues { get; init; }
         public string MessageTransport { get; init; }
         public string? Prefix { get; init; }
         public Particular.LicensingComponent.Report.QueueThroughput[] Queues { get; init; }
+        public System.TimeSpan ReportDuration { get; set; }
         public string ReportMethod { get; init; }
         public string ScopeType { get; init; }
+        public System.DateTimeOffset StartTime { get; set; }
         public string? ToolType { get; init; }
         public string ToolVersion { get; init; }
         [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
