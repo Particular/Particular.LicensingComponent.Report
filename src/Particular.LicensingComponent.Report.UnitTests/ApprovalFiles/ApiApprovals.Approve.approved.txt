@@ -33,6 +33,7 @@ namespace Particular.LicensingComponent.Report
         public bool NoDataOrSendOnly { get; init; }
         public string QueueName { get; set; }
         public string Scope { get; init; }
+        public string ScopeHash { get; set; }
         public long? Throughput { get; set; }
         public string? UserIndicator { get; init; }
     }
