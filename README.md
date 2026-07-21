@@ -1,7 +1,7 @@
 # Particular.LicensingComponent.Report
 
 The Particular.LicensingComponent.Report nuget package that is used by to manage the throughput report data contract, serialization and validation required for NServiceBus licensing purposes.
-This package is deploted to feedz and is currently used in:
+This package is deployed to feedz and is currently used in:
 
 - [Endpoint Throughput Counter Tool](https://github.com/Particular/Particular.EndpointThroughputCounter)
 - [Platform License Component hosted in ServiceControl](https://github.com/Particular/ServiceControl)
