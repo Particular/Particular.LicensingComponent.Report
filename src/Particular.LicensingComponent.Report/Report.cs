@@ -150,6 +150,14 @@ public record QueueThroughput
     public string Scope { get; init; }
 
     /// <summary>
+    /// A hash of the scope to support unique identification of queues across reports without exposing potentially sensitive information.
+    /// </summary>
+    /// <remarks>
+    /// This should be a one-way hash of the unmasked scope, if it exists.
+    /// </remarks>
+    public string ScopeHash { get; set; }
+
+    /// <summary>
     /// Breakdown of daily throughput for each queue obtained from the broker
     /// </summary>
     public DailyThroughput[] DailyThroughputFromBroker { get; init; }
