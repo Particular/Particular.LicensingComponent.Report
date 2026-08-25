@@ -82,7 +82,6 @@ public class LicensingComponent_Report_Signature_Tests
         Assert.That(data.Queues.All(q => !q.NoDataOrSendOnly));
         Assert.That(data.Queues.All(q => q.EndpointIndicators is null));
 
-        Assert.That(data.TotalThroughput, Is.EqualTo(0));
         Assert.That(data.TotalQueues, Is.EqualTo(7));
 
         Assert.That(report.Signature, Is.EqualTo("ybIzoo9ogZtbSm5+jJa3GxncjCX3fxAfiLSI7eogG20KjJiv43aCE+7Lsvhkat7AALM34HgwI3VsgzRmyLYXD5n0+XRrWXNgeRGbLEG6d1W2djLRHNjXo423zpGTYDeMq3vhI9yAcil0K0dCC/ZCnw8dPd51pNmgKYIvrfELW0hyN70trUeCMDhYRfXruWLNe8Hfy+tS8Bm13B5vknXNlAjBIuGjXn3XILRRSVrTbb4QMIRzSluSnSTFPTCyE9wMWwC0BUGSf7ZEA0XdeN6UkaO/5URSOQVesiSLRqQWbfUc87XlY1hMs5Z7kLSOr5WByIQIfQKum1nGVjLMzshyhQ=="));
@@ -118,7 +117,6 @@ public class LicensingComponent_Report_Signature_Tests
         Assert.That(data.Queues.Any(q => q.QueueName == "Endpoint2" && q.DailyThroughputFromBroker.Any(t => t.MessageCount == 60 && t.DateUTC.ToString("yyyy-MM-dd") == "2024-04-24")));
         Assert.That(data.Queues.Any(q => q.EndpointIndicators?.Contains("KnownEndpoint") ?? false), Is.True);
 
-        Assert.That(data.TotalThroughput, Is.EqualTo(249));
         Assert.That(data.TotalQueues, Is.EqualTo(5));
         Assert.That(data.EnvironmentInformation.AuditServicesData.Versions.Count, Is.EqualTo(1));
         Assert.That(data.EnvironmentInformation.AuditServicesData.Transports.Count, Is.EqualTo(1));
@@ -218,7 +216,6 @@ public class LicensingComponent_Report_Signature_Tests
             EndTime = end,
             ReportDuration = end - start,
             Queues = queues,
-            TotalThroughput = queues.Sum(q => q.Throughput ?? 0),
             TotalQueues = queues.Length,
             Prefix = "SomePrefix",
             IgnoredQueues = new[] { "ignore1", "ignore2", "ignore3" },
