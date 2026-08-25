@@ -55,8 +55,6 @@ namespace Particular.LicensingComponent.Report
         public string ToolVersion { get; init; }
         [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
         public int TotalQueues { get; init; }
-        [System.Text.Json.Serialization.JsonIgnore(Condition=System.Text.Json.Serialization.JsonIgnoreCondition.Never)]
-        public long TotalThroughput { get; init; }
     }
     public class ReportValidationResult
     {
