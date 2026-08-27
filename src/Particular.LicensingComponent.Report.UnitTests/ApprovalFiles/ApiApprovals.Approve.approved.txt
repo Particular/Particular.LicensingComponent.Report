@@ -77,6 +77,10 @@ namespace Particular.LicensingComponent.Report
         public Particular.LicensingComponent.Report.Report ReportData { get; init; }
         public string Signature { get; init; }
     }
+    public static class ValidatingReportReader
+    {
+        public static Particular.LicensingComponent.Report.Report? Read(System.IO.Stream stream, out Particular.LicensingComponent.Report.ReportValidationResult validationResult) { }
+    }
 }
 namespace Particular.LicensingComponent.Report.Utility
 {
