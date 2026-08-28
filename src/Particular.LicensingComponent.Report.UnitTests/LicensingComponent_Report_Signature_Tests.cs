@@ -126,7 +126,6 @@ public class LicensingComponent_Report_Signature_Tests
         Assert.That(data.EnvironmentInformation.EnvironmentData.ContainsKey("MonitoringEnabled"), Is.True);
         Assert.That(data.EnvironmentInformation.EnvironmentData["MonitoringEnabled"], Is.EqualTo("True"));
 
-        //Assert.That(report.Signature, Is.EqualTo("IEbO4i0Jn54iHUzlwotHf9aw/fZIHY+dztY9cMRkWjVVo6AiYtihWR0mip793gRrWHOxHVobCpa4l5svRk16mBR+YAOrs3KNRVTzrl4+wL21e1u9zFuPNrHLtFeul+taJxV8ciA7zEgD7LMle9CcR/Vfm8BZ9mmD5W/DjsCYLCdVXfN4iRMlz+eW50mOHty21yJ0pOiYBooaN2EJexVY4Q+5FMyAkm0wucEPFyaQB6+SfcS37fEm807B7sXhtUPiW+einqDOX6uYF+MuXxUn1u9LxlEWKV9kPqXJnulxmoReHXHigP45pj/8m9jUzrQdagINl1uIOBkq5SMDccRfTA=="));
 
         Assert.That(validationResult.IsValid, Is.True);
     }
@@ -179,7 +178,7 @@ public class LicensingComponent_Report_Signature_Tests
         Assert.That(validationResult.IsValid, Is.True);
     }
 
-    public static Report? Parse(string rawJson, out ReportValidationResult validationResult)
+    static Report? Parse(string rawJson, out ReportValidationResult validationResult)
     {
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawJson));
         return ValidatingReportReader.ReadAndValidate(stream, out validationResult);

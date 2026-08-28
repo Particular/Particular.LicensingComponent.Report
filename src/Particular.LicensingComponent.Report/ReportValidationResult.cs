@@ -19,4 +19,18 @@ public class ReportValidationResult
     /// Report id of the report being validated
     /// </summary>
     public string? ReportId { get; internal set; }
+
+
+    internal static ReportValidationResult Valid(string reportId) => new()
+    {
+        IsValid = true,
+        ReportId = reportId
+    };
+
+    internal static ReportValidationResult Invalid(string? reportId, string reason) => new()
+    {
+        IsValid = false,
+        InvalidReason = reason,
+        ReportId = reportId
+    };
 }

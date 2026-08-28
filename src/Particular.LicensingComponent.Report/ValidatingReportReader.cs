@@ -22,11 +22,7 @@ public static class ValidatingReportReader
 
         if (!root.TryGetProperty(nameof(SignedReport.ReportData), out var reportDataElement))
         {
-            validationResult = new ReportValidationResult
-            {
-                IsValid = false,
-                InvalidReason = "Could not find ReportData property"
-            };
+            validationResult = ReportValidationResult.Invalid(null, "Could not find ReportData property");
             return null;
         }
 
@@ -41,30 +37,23 @@ public static class ValidatingReportReader
         var reportBytes = MinifyJsonElementToBytes(reportDataElement);
 
         var reportId = Convert.ToHexString(SHA1.HashData(reportBytes));
-        var validationResult = new ReportValidationResult
-        {
-            ReportId = reportId
-        };
 
         if (!root.TryGetProperty(nameof(SignedReport.Signature), out var signatureElement))
         {
-            validationResult.InvalidReason = "Could not find signature";
-            return validationResult;
+            return ReportValidationResult.Invalid(reportId, "Could not find signature");
         }
 
         var signature = signatureElement.GetString() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(signature))
         {
-            validationResult.InvalidReason = "Signature is empty";
-            return validationResult;
+            return ReportValidationResult.Invalid(reportId, "Signature is empty");
         }
 
         // Validate signature
         var pemData = Environment.GetEnvironmentVariable("THROUGHPUT_REPORT_PRIVATEKEY_PEM");
         if (string.IsNullOrWhiteSpace(pemData))
         {
-            validationResult.InvalidReason = "No private key available to validate signature";
-            return validationResult;
+            return ReportValidationResult.Invalid(reportId, "No private key available to validate signature");
         }
 
         byte[] signatureBytes;
@@ -75,8 +64,7 @@ public static class ValidatingReportReader
         catch (FormatException)
         {
             // NOTE: The signature is not valid base64, which means it is invalid. We will return false for IsValid in this case.
-            validationResult.InvalidReason = "Signature could not be decoded";
-            return validationResult;
+            return ReportValidationResult.Invalid(reportId, "Signature could not be decoded");
         }
 
         var correctSignature = Convert.ToBase64String(SHA512.HashData(reportBytes));
@@ -87,16 +75,9 @@ public static class ValidatingReportReader
         var decryptedHash = rsa.Decrypt(signatureBytes, RSAEncryptionPadding.Pkcs1);
         var decryptedSignature = Convert.ToBase64String(decryptedHash);
 
-        if (correctSignature == decryptedSignature)
-        {
-            validationResult.IsValid = true;
-        }
-        else
-        {
-            validationResult.InvalidReason = "Signature does not match report data";
-        }
-
-        return validationResult;
+        return (correctSignature == decryptedSignature)
+            ? ReportValidationResult.Valid(reportId)
+            : ReportValidationResult.Invalid(reportId, "Signature does not match report data");
     }
 
     static readonly JsonWriterOptions MinifyOptions = new()
