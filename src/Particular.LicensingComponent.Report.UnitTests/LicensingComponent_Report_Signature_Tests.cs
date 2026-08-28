@@ -38,7 +38,7 @@ public class LicensingComponent_Report_Signature_Tests
         var _ = Parse(reportString, out var validationResult);
 
         //Assert
-        Assert.That(validationResult.IsValid, Is.True);
+        Assert.That(Validate(validationResult));
     }
 
     [Test]
@@ -53,7 +53,7 @@ public class LicensingComponent_Report_Signature_Tests
         var _ = Parse(reportString, out var validationResult);
 
         //Assert
-        Assert.That(validationResult.IsValid, Is.False);
+        Assert.That(Validate(validationResult), Is.False);
     }
 
     [Test]
@@ -84,7 +84,7 @@ public class LicensingComponent_Report_Signature_Tests
 
         Assert.That(data.TotalQueues, Is.EqualTo(7));
 
-        Assert.That(validationResult.IsValid, Is.True);
+        Assert.That(Validate(validationResult));
     }
 
     [Test]
@@ -126,8 +126,7 @@ public class LicensingComponent_Report_Signature_Tests
         Assert.That(data.EnvironmentInformation.EnvironmentData.ContainsKey("MonitoringEnabled"), Is.True);
         Assert.That(data.EnvironmentInformation.EnvironmentData["MonitoringEnabled"], Is.EqualTo("True"));
 
-
-        Assert.That(validationResult.IsValid, Is.True);
+        Assert.That(Validate(validationResult));
     }
 
 #if !DEBUG
@@ -176,6 +175,23 @@ public class LicensingComponent_Report_Signature_Tests
 
         //Assert
         Assert.That(validationResult.IsValid, Is.True);
+    }
+
+    static bool Validate(ReportValidationResult validationResult)
+    {
+        if (validationResult.IsValid)
+        {
+            return true;
+        }
+
+#if DEBUG
+        if (validationResult.InvalidReason == "No private key available to validate signature")
+        {
+            Assert.Ignore("Ignoring report validation as this is a DEBUG build and the THROUGHPUT_REPORT_PRIVATEKEY_PEM environment variable is missing.");
+            return true;
+        }
+#endif
+        return false;
     }
 
     static Report? Parse(string rawJson, out ReportValidationResult validationResult)
