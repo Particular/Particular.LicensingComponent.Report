@@ -63,7 +63,8 @@ public class LicensingComponent_Report_Signature_Tests
         using var stream = GetResourceStream("throughput-report-v1.0.json");
 
         //Act
-        var data = ValidatingReportReader.ReadAndValidate(stream!, out var validationResult);
+        var report = ValidatingReportReader.ReadAndValidate(stream!, out var validationResult);
+        var data = report!.ReportData;
 
         //Assert
         // Want to be explicit with asserts to ensure that a 1.0 report can be read correctly
@@ -84,6 +85,8 @@ public class LicensingComponent_Report_Signature_Tests
 
         Assert.That(data.TotalQueues, Is.EqualTo(7));
 
+        Assert.That(report.Signature, Is.EqualTo("ybIzoo9ogZtbSm5+jJa3GxncjCX3fxAfiLSI7eogG20KjJiv43aCE+7Lsvhkat7AALM34HgwI3VsgzRmyLYXD5n0+XRrWXNgeRGbLEG6d1W2djLRHNjXo423zpGTYDeMq3vhI9yAcil0K0dCC/ZCnw8dPd51pNmgKYIvrfELW0hyN70trUeCMDhYRfXruWLNe8Hfy+tS8Bm13B5vknXNlAjBIuGjXn3XILRRSVrTbb4QMIRzSluSnSTFPTCyE9wMWwC0BUGSf7ZEA0XdeN6UkaO/5URSOQVesiSLRqQWbfUc87XlY1hMs5Z7kLSOr5WByIQIfQKum1nGVjLMzshyhQ=="));
+
         Assert.That(Validate(validationResult));
     }
 
@@ -94,7 +97,8 @@ public class LicensingComponent_Report_Signature_Tests
         using var stream = GetResourceStream("throughput-report-v2.0.json");
 
         //Act
-        var data = ValidatingReportReader.ReadAndValidate(stream!, out var validationResult);
+        var report = ValidatingReportReader.ReadAndValidate(stream!, out var validationResult);
+        var data = report!.ReportData;
 
         //Assert
         // Want to be explicit with asserts to ensure that a 2.0 report can be read correctly
@@ -125,6 +129,8 @@ public class LicensingComponent_Report_Signature_Tests
         Assert.That(data.EnvironmentInformation.EnvironmentData["AuditEnabled"], Is.EqualTo("True"));
         Assert.That(data.EnvironmentInformation.EnvironmentData.ContainsKey("MonitoringEnabled"), Is.True);
         Assert.That(data.EnvironmentInformation.EnvironmentData["MonitoringEnabled"], Is.EqualTo("True"));
+
+        Assert.That(report.Signature, Is.EqualTo("IEbO4i0Jn54iHUzlwotHf9aw/fZIHY+dztY9cMRkWjVVo6AiYtihWR0mip793gRrWHOxHVobCpa4l5svRk16mBR+YAOrs3KNRVTzrl4+wL21e1u9zFuPNrHLtFeul+taJxV8ciA7zEgD7LMle9CcR/Vfm8BZ9mmD5W/DjsCYLCdVXfN4iRMlz+eW50mOHty21yJ0pOiYBooaN2EJexVY4Q+5FMyAkm0wucEPFyaQB6+SfcS37fEm807B7sXhtUPiW+einqDOX6uYF+MuXxUn1u9LxlEWKV9kPqXJnulxmoReHXHigP45pj/8m9jUzrQdagINl1uIOBkq5SMDccRfTA=="));
 
         Assert.That(Validate(validationResult));
     }
@@ -194,7 +200,7 @@ public class LicensingComponent_Report_Signature_Tests
         return false;
     }
 
-    static Report? Parse(string rawJson, out ReportValidationResult validationResult)
+    static SignedReport? Parse(string rawJson, out ReportValidationResult validationResult)
     {
         using var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawJson));
         return ValidatingReportReader.ReadAndValidate(stream, out validationResult);

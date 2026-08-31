@@ -80,7 +80,7 @@ namespace Particular.LicensingComponent.Report
     }
     public static class ValidatingReportReader
     {
-        public static Particular.LicensingComponent.Report.Report? ReadAndValidate(System.IO.Stream stream, out Particular.LicensingComponent.Report.ReportValidationResult validationResult) { }
+        public static Particular.LicensingComponent.Report.SignedReport? ReadAndValidate(System.IO.Stream stream, out Particular.LicensingComponent.Report.ReportValidationResult validationResult) { }
     }
 }
 namespace Particular.LicensingComponent.Report.Utility

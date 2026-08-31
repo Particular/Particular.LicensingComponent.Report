@@ -15,7 +15,7 @@ public static class ValidatingReportReader
     /// </summary>
     /// <param name="stream"></param>
     /// <param name="validationResult"></param>
-    public static Report? ReadAndValidate(Stream stream, out ReportValidationResult validationResult)
+    public static SignedReport? ReadAndValidate(Stream stream, out ReportValidationResult validationResult)
     {
         using var doc = JsonDocument.Parse(stream);
         var root = doc.RootElement;
@@ -28,7 +28,7 @@ public static class ValidatingReportReader
 
         validationResult = ValidateSignature(root, reportDataElement);
 
-        return reportDataElement.Deserialize<Report>();
+        return root.Deserialize<SignedReport>();
     }
 
     static ReportValidationResult ValidateSignature(JsonElement root, JsonElement reportDataElement)
