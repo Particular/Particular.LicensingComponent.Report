@@ -20,19 +20,18 @@ public static class ValidatingReportReader
         using var doc = JsonDocument.Parse(stream);
         var root = doc.RootElement;
 
-        if (!root.TryGetProperty(nameof(SignedReport.ReportData), out var reportDataElement))
-        {
-            validationResult = ReportValidationResult.Invalid(null, "Could not find ReportData property");
-            return null;
-        }
-
-        validationResult = ValidateSignature(root, reportDataElement);
+        validationResult = ValidateSignature(root);
 
         return root.Deserialize<SignedReport>();
     }
 
-    static ReportValidationResult ValidateSignature(JsonElement root, JsonElement reportDataElement)
+    static ReportValidationResult ValidateSignature(JsonElement root)
     {
+        if (!root.TryGetProperty(nameof(SignedReport.ReportData), out var reportDataElement))
+        {
+            return ReportValidationResult.Invalid(null, "Could not find ReportData property");
+        }
+
         // NOTE: In .NET 9 we can get the bytes directly from the JsonElement, but in .NET 8 we have to get the raw text and convert it to bytes ourselves.
         var reportBytes = MinifyJsonElementToBytes(reportDataElement);
 
