@@ -22,7 +22,6 @@
         "NoDataOrSendOnly": true
       }
     ],
-    "TotalThroughput": 10042,
     "TotalQueues": 3,
     "IgnoredQueues": [
       "ignore1",

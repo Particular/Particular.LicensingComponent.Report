@@ -1,8 +1,5 @@
 namespace Particular.LicensingComponent.Report;
 
-using System.Security.Cryptography;
-using System.Text.Json;
-
 /// <summary>
 /// Report validator
 /// </summary>
@@ -14,52 +11,26 @@ public class ReportValidationResult
     public bool IsValid { get; internal set; }
 
     /// <summary>
-    /// Report id of the report being validated
+    /// Reason why the report is invalid, if applicable
     /// </summary>
-    public string ReportId { get; }
-
-    internal ReportValidationResult(string reportId)
-    {
-        ReportId = reportId;
-        IsValid = true;
-    }
+    public string? InvalidReason { get; internal set; }
 
     /// <summary>
-    /// Method that tests whether the signed report is valid
+    /// Report id of the report being validated
     /// </summary>
-    /// <param name="signedReport"></param>
-    /// <exception cref="NoPrivateKeyException"></exception>
-    public ReportValidationResult(SignedReport signedReport)
+    public string? ReportId { get; internal set; }
+
+
+    internal static ReportValidationResult Valid(string reportId) => new()
     {
-        var reserializedReportBytes = JsonSerializer.SerializeToUtf8Bytes(signedReport.ReportData, SerializationOptions.NotIndentedWithNoEscaping);
+        IsValid = true,
+        ReportId = reportId
+    };
 
-        ReportId = Convert.ToHexString(SHA1.HashData(reserializedReportBytes));
-
-        if (signedReport?.Signature is null)
-        {
-            return;
-        }
-
-        var pemData = Environment.GetEnvironmentVariable("THROUGHPUT_REPORT_PRIVATEKEY_PEM") ?? throw new NoPrivateKeyException(ReportId);
-
-        byte[] signatureBytes;
-        try
-        {
-            signatureBytes = Convert.FromBase64String(signedReport.Signature);
-        }
-        catch (FormatException)
-        {
-            return;
-        }
-
-        var correctSignature = Convert.ToBase64String(SHA512.HashData(reserializedReportBytes));
-
-        using var rsa = RSA.Create();
-
-        rsa.ImportFromPem(pemData);
-        var decryptedHash = rsa.Decrypt(signatureBytes, RSAEncryptionPadding.Pkcs1);
-        var decryptedSignature = Convert.ToBase64String(decryptedHash);
-
-        IsValid = correctSignature == decryptedSignature;
-    }
+    internal static ReportValidationResult Invalid(string? reportId, string reason) => new()
+    {
+        IsValid = false,
+        InvalidReason = reason,
+        ReportId = reportId
+    };
 }

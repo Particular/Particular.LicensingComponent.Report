@@ -84,12 +84,6 @@ public record Report
     public QueueThroughput[] Queues { get; init; }
 
     /// <summary>
-    /// Total throughput for all queues
-    /// </summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.Never)] // Must be serialized even if 0 to maintain compatibility with old report signatures
-    public long TotalThroughput { get; init; }
-
-    /// <summary>
     /// Total number of detected queues
     /// </summary>
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)] // Must be serialized even if 0 to maintain compatibility with old report signatures
