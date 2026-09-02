@@ -58,9 +58,10 @@ namespace Particular.LicensingComponent.Report
     }
     public class ReportValidationResult
     {
-        public ReportValidationResult(Particular.LicensingComponent.Report.SignedReport signedReport) { }
+        public ReportValidationResult() { }
+        public string? InvalidReason { get; }
         public bool IsValid { get; }
-        public string ReportId { get; }
+        public string? ReportId { get; }
     }
     public static class SerializationOptions
     {
@@ -76,6 +77,10 @@ namespace Particular.LicensingComponent.Report
         public SignedReport() { }
         public Particular.LicensingComponent.Report.Report ReportData { get; init; }
         public string Signature { get; init; }
+    }
+    public static class ValidatingReportReader
+    {
+        public static Particular.LicensingComponent.Report.SignedReport? ReadAndValidate(System.IO.Stream stream, out Particular.LicensingComponent.Report.ReportValidationResult validationResult) { }
     }
 }
 namespace Particular.LicensingComponent.Report.Utility

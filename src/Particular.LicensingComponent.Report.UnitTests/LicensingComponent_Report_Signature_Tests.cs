@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using NUnit.Framework;
@@ -34,10 +35,10 @@ public class LicensingComponent_Report_Signature_Tests
 
         //Act
         var reportString = JsonSerializer.Serialize(report, SerializationOptions.NotIndentedWithNoEscaping);
-        var deserialized = JsonSerializer.Deserialize<SignedReport>(reportString, SerializationOptions.NotIndentedWithNoEscaping);
+        var _ = Parse(reportString, out var validationResult);
 
         //Assert
-        Assert.That(ValidateReport(deserialized));
+        Assert.That(Validate(validationResult));
     }
 
     [Test]
@@ -49,26 +50,26 @@ public class LicensingComponent_Report_Signature_Tests
 
         //Act
         reportString = reportString.Replace("\"Throughput\": 42", "\"Throughput\": 13");
-        var deserialized = JsonSerializer.Deserialize<SignedReport>(reportString, SerializationOptions.NotIndentedWithNoEscaping);
+        var _ = Parse(reportString, out var validationResult);
 
         //Assert
-        Assert.That(ValidateReport(deserialized), Is.False);
+        Assert.That(Validate(validationResult), Is.False);
     }
 
     [Test]
     public void Should_be_able_to_read_a_V1_report()
     {
         //Arrange
-        var reportString = GetResource("throughput-report-v1.0.json");
+        using var stream = GetResourceStream("throughput-report-v1.0.json");
 
         //Act
-        var report = JsonSerializer.Deserialize<SignedReport>(reportString, SerializationOptions.NotIndentedWithNoEscaping);
+        var report = ValidatingReportReader.ReadAndValidate(stream!, out var validationResult);
         var data = report!.ReportData;
 
         //Assert
         // Want to be explicit with asserts to ensure that a 1.0 report can be read correctly
         // An approval test would be too easy to just accept changes on
-        Assert.That(data.CustomerName, Is.EqualTo("Testing"));
+        Assert.That(data!.CustomerName, Is.EqualTo("Testing"));
         Assert.That(data.MessageTransport, Is.EqualTo("RabbitMQ"));
         Assert.That(data.ReportMethod, Is.EqualTo("ThroughputTool: RabbitMQ Admin"));
         Assert.That(data.ToolVersion, Is.EqualTo("1.0.0"));
@@ -86,23 +87,23 @@ public class LicensingComponent_Report_Signature_Tests
 
         Assert.That(report.Signature, Is.EqualTo("ybIzoo9ogZtbSm5+jJa3GxncjCX3fxAfiLSI7eogG20KjJiv43aCE+7Lsvhkat7AALM34HgwI3VsgzRmyLYXD5n0+XRrWXNgeRGbLEG6d1W2djLRHNjXo423zpGTYDeMq3vhI9yAcil0K0dCC/ZCnw8dPd51pNmgKYIvrfELW0hyN70trUeCMDhYRfXruWLNe8Hfy+tS8Bm13B5vknXNlAjBIuGjXn3XILRRSVrTbb4QMIRzSluSnSTFPTCyE9wMWwC0BUGSf7ZEA0XdeN6UkaO/5URSOQVesiSLRqQWbfUc87XlY1hMs5Z7kLSOr5WByIQIfQKum1nGVjLMzshyhQ=="));
 
-        Assert.That(ValidateReport(report));
+        Assert.That(Validate(validationResult));
     }
 
     [Test]
     public void Should_be_able_to_read_a_V2_report()
     {
         //Arrange
-        var reportString = GetResource("throughput-report-v2.0.json");
+        using var stream = GetResourceStream("throughput-report-v2.0.json");
 
         //Act
-        var report = JsonSerializer.Deserialize<SignedReport>(reportString, SerializationOptions.NotIndentedWithNoEscaping);
+        var report = ValidatingReportReader.ReadAndValidate(stream!, out var validationResult);
         var data = report!.ReportData;
 
         //Assert
         // Want to be explicit with asserts to ensure that a 2.0 report can be read correctly
         // An approval test would be too easy to just accept changes on
-        Assert.That(data.CustomerName, Is.EqualTo("TestCustomer"));
+        Assert.That(data!.CustomerName, Is.EqualTo("TestCustomer"));
         Assert.That(data.MessageTransport, Is.EqualTo("AzureServiceBus"));
         Assert.That(data.ReportMethod, Is.EqualTo("Broker"));
         Assert.That(data.ToolType, Is.EqualTo("Platform Licensing Component"));
@@ -131,7 +132,7 @@ public class LicensingComponent_Report_Signature_Tests
 
         Assert.That(report.Signature, Is.EqualTo("IEbO4i0Jn54iHUzlwotHf9aw/fZIHY+dztY9cMRkWjVVo6AiYtihWR0mip793gRrWHOxHVobCpa4l5svRk16mBR+YAOrs3KNRVTzrl4+wL21e1u9zFuPNrHLtFeul+taJxV8ciA7zEgD7LMle9CcR/Vfm8BZ9mmD5W/DjsCYLCdVXfN4iRMlz+eW50mOHty21yJ0pOiYBooaN2EJexVY4Q+5FMyAkm0wucEPFyaQB6+SfcS37fEm807B7sXhtUPiW+einqDOX6uYF+MuXxUn1u9LxlEWKV9kPqXJnulxmoReHXHigP45pj/8m9jUzrQdagINl1uIOBkq5SMDccRfTA=="));
 
-        Assert.That(ValidateReport(report));
+        Assert.That(Validate(validationResult));
     }
 
 #if !DEBUG
@@ -176,22 +177,40 @@ public class LicensingComponent_Report_Signature_Tests
 
         //Arrange
         var reportString = File.ReadAllText(reportFile);
-        var report = JsonSerializer.Deserialize<SignedReport>(reportString, SerializationOptions.NotIndentedWithNoEscaping);
+        var _ = Parse(reportString, out var validationResult);
 
         //Assert
-        Assert.That(ValidateReport(report));
+        Assert.That(validationResult.IsValid, Is.True);
     }
 
+    static bool Validate(ReportValidationResult validationResult)
+    {
+        if (validationResult.IsValid)
+        {
+            return true;
+        }
 
-    string GetResource(string resourceName)
+#if DEBUG
+        if (validationResult.InvalidReason == "No private key available to validate signature")
+        {
+            Assert.Ignore("Ignoring report validation as this is a DEBUG build and the THROUGHPUT_REPORT_PRIVATEKEY_PEM environment variable is missing.");
+            return true;
+        }
+#endif
+        return false;
+    }
+
+    static SignedReport? Parse(string rawJson, out ReportValidationResult validationResult)
+    {
+        using var stream = new MemoryStream(Encoding.UTF8.GetBytes(rawJson));
+        return ValidatingReportReader.ReadAndValidate(stream, out validationResult);
+    }
+
+    Stream? GetResourceStream(string resourceName)
     {
         var assembly = typeof(LicensingComponent_Report_Signature_Tests).Assembly;
         var assemblyName = assembly.GetName().Name;
-        using (var stream = assembly.GetManifestResourceStream($"{assemblyName}.{resourceName}"))
-        using (var reader = new StreamReader(stream!))
-        {
-            return reader.ReadToEnd();
-        }
+        return assembly.GetManifestResourceStream($"{assemblyName}.{resourceName}");
     }
 
     SignedReport CreateReport()
@@ -227,29 +246,5 @@ public class LicensingComponent_Report_Signature_Tests
             ReportData = reportData,
             Signature = Signature.SignReport(reportData)
         };
-    }
-
-    bool ValidateReport(SignedReport? signedReport)
-    {
-        if (signedReport == null)
-        {
-            return false;
-        }
-
-        try
-        {
-            var validationResult = new ReportValidationResult(signedReport);
-            return validationResult.IsValid;
-        }
-        catch (NoPrivateKeyException)
-        {
-#if DEBUG
-            // We don't distribute the private key to do local testing, this only happens during CI
-            Assert.Ignore("Ignoring report validation as this is a DEBUG build and the THROUGHPUT_REPORT_PRIVATEKEY_PEM environment variable is missing.");
-            return true;
-#endif
-
-            throw;
-        }
     }
 }
