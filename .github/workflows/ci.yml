@@ -26,7 +26,7 @@ jobs:
       - name: Build
         run: dotnet build src --configuration Release
       - name: Run tests
-        uses: Particular/run-tests-action@v1.8.0
+        uses: Particular/run-tests-action@v1.9.0
         env:
           THROUGHPUT_REPORT_PRIVATEKEY_PEM: ${{ secrets.THROUGHPUT_REPORT_PRIVATEKEY_PEM }}     
       - name: Publish artifacts
