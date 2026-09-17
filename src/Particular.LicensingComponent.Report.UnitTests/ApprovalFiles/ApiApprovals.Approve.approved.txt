@@ -27,6 +27,7 @@ namespace Particular.LicensingComponent.Report
         public QueueThroughput() { }
         public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromAudit { get; init; }
         public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromBroker { get; init; }
+        public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromEndpoint { get; init; }
         public Particular.LicensingComponent.Report.DailyThroughput[] DailyThroughputFromMonitoring { get; init; }
         public string[] EndpointIndicators { get; init; }
         public string NameHash { get; set; }
