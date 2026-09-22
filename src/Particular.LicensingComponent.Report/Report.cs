@@ -165,6 +165,11 @@ public record QueueThroughput
     /// Breakdown of daily throughput for each queue obtained from monitoring
     /// </summary>
     public DailyThroughput[] DailyThroughputFromMonitoring { get; init; }
+
+    /// <summary>
+    /// Breakdown of daily throughput as recorded by the endpoint
+    /// </summary>
+    public DailyThroughput[] DailyThroughputFromEndpoint { get; init; }
 }
 
 /// <summary>
