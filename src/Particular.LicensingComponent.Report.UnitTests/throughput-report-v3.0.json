@@ -1,0 +1,174 @@
+{
+  "ReportData": {
+    "CustomerName": "TestCustomer",
+    "MessageTransport": "AzureServiceBus",
+    "ReportMethod": "Broker",
+    "ToolType": "Platform Licensing Component",
+    "ToolVersion": "6.20",
+    "ScopeType": "testingScope",
+    "StartTime": "2026-09-20T00:00:00+00:00",
+    "EndTime": "2026-09-21T00:00:00+00:00",
+    "ReportDuration": "1.00:00:00",
+    "Queues": [
+      {
+        "QueueName": "REDACTED1",
+        "Throughput": 65,
+        "EndpointIndicators": [
+          "KnownEndpoint"
+        ],
+        "Scope": "",
+        "DailyThroughputFromBroker": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 50
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 55
+          }
+        ],
+        "DailyThroughputFromAudit": [],
+        "DailyThroughputFromMonitoring": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 60
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 65
+          }
+        ],
+        "DailyThroughputFromEndpoint": []
+      },
+      {
+        "QueueName": "EndpointWithSelfReportedUsage",
+        "Throughput": 65,
+        "EndpointIndicators": [
+          "KnownEndpoint"
+        ],
+        "Scope": "",
+        "DailyThroughputFromBroker": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 120
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 135
+          }
+        ],
+        "DailyThroughputFromAudit": [],
+        "DailyThroughputFromMonitoring": [],
+        "DailyThroughputFromEndpoint": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 60
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 65
+          }
+        ]
+      },
+      {
+        "QueueName": "EndpointWithAllSources",
+        "Throughput": 65,
+        "EndpointIndicators": [
+          "KnownEndpoint"
+        ],
+        "Scope": "",
+        "DailyThroughputFromBroker": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 120
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 135
+          }
+        ],
+        "DailyThroughputFromAudit": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 120
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 135
+          }
+        ],
+        "DailyThroughputFromMonitoring": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 95
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 105
+          }
+        ],
+        "DailyThroughputFromEndpoint": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 60
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 65
+          }
+        ]
+      },
+      {
+        "QueueName": "EndpointWithJustBrokerData",
+        "Throughput": 47,
+        "EndpointIndicators": [],
+        "UserIndicator": "PlannedToDecommission",
+        "Scope": "",
+        "DailyThroughputFromBroker": [
+          {
+            "DateUTC": "2026-09-20",
+            "MessageCount": 42
+          },
+          {
+            "DateUTC": "2026-09-21",
+            "MessageCount": 47
+          }
+        ],
+        "DailyThroughputFromAudit": [],
+        "DailyThroughputFromMonitoring": [],
+        "DailyThroughputFromEndpoint": []
+      },
+      {
+        "QueueName": "EndpointWithNoData",
+        "Throughput": 15,
+        "EndpointIndicators": [],
+        "UserIndicator": "NotNServiceBusEndpoint",
+        "Scope": "",
+        "DailyThroughputFromBroker": [],
+        "DailyThroughputFromAudit": [],
+        "DailyThroughputFromMonitoring": [],
+        "DailyThroughputFromEndpoint": []
+      }
+    ],
+    "TotalQueues": 5,
+    "IgnoredQueues": [],
+    "EnvironmentInformation": {
+      "AuditServicesData": {
+        "Versions": {
+          "4.3.6": 2
+        },
+        "Transports": {
+          "AzureServiceBus": 2
+        }
+      },
+      "EnvironmentData": {
+        "BrokerVersion": "1.2",
+        "ServiceControlVersion": "6.20.0",
+        "ServicePulseVersion": "2.8.0",
+        "AuditEnabled": "True",
+        "MonitoringEnabled": "True"
+      }
+    }
+  },
+  "Signature": "wveYaUgrMafyParJVSL8HppdywT5yeon3ZTEWIaagNGhLYaWDkkX3c7v+nvlkGIAQhLidjptsODcoTEipd+E/rQM6PrRnxw45sJlIrakANu8dbfuEDcIRq7WvUBynfeN/qGYhEsJZaQI93R8Twn7kgfaXPR86jo1IeJOB7ITYbfoVPmevAqzK17yZzfkHxPGoRJL3lf824S4Ak5vpoyckrRXs2wV4XqfiifWzcjBniwoHrYw6bY5Be0hd/qGxXF+AGmo6wdAVj6WpaVZx3rkLmMyVEGZoTtLtL8aJX0sabx3olWU1EdT+ouc00R0latZFNrMf8ZHgiT63urhkedAsQ=="
+}

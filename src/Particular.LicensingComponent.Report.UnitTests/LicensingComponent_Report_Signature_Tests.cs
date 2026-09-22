@@ -135,6 +135,29 @@ public class LicensingComponent_Report_Signature_Tests
         Assert.That(Validate(validationResult));
     }
 
+    [Test]
+    public void Should_be_able_to_read_a_V3_report()
+    {
+        //Arrange
+        using var stream = GetResourceStream("throughput-report-v3.0.json");
+
+        //Act
+        var report = ValidatingReportReader.ReadAndValidate(stream!, out var validationResult);
+        var data = report!.ReportData;
+
+        //Assert
+        // Want to be explicit with asserts to ensure that a 3.0 report can be read correctly
+        // An approval test would be too easy to just accept changes on
+        Assert.That(data.Queues, Has.Length.EqualTo(5));
+        Assert.That(data.Queues.All(q => !string.IsNullOrEmpty(q.QueueName)));
+        Assert.That(data.Queues.Any(q => q.QueueName == "EndpointWithSelfReportedUsage" && q.DailyThroughputFromEndpoint.Any(t => t.MessageCount == 65 && t.DateUTC.ToString("yyyy-MM-dd") == "2026-09-21")));
+        Assert.That(data.Queues.Any(q => q.QueueName == "EndpointWithJustBrokerData" && q.DailyThroughputFromEndpoint.Length == 0));
+
+        Assert.That(report.Signature, Is.EqualTo("wveYaUgrMafyParJVSL8HppdywT5yeon3ZTEWIaagNGhLYaWDkkX3c7v+nvlkGIAQhLidjptsODcoTEipd+E/rQM6PrRnxw45sJlIrakANu8dbfuEDcIRq7WvUBynfeN/qGYhEsJZaQI93R8Twn7kgfaXPR86jo1IeJOB7ITYbfoVPmevAqzK17yZzfkHxPGoRJL3lf824S4Ak5vpoyckrRXs2wV4XqfiifWzcjBniwoHrYw6bY5Be0hd/qGxXF+AGmo6wdAVj6WpaVZx3rkLmMyVEGZoTtLtL8aJX0sabx3olWU1EdT+ouc00R0latZFNrMf8ZHgiT63urhkedAsQ=="));
+
+        Assert.That(Validate(validationResult));
+    }
+
 #if !DEBUG
     [Ignore("This test is here to help with generating a signed report file from a file that only contains report data")]
 #endif
