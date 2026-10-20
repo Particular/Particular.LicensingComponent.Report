@@ -95,6 +95,11 @@ public record Report
     public string[] IgnoredQueues { get; init; }
 
     /// <summary>
+    /// Information, supplied by the customer, containing their suggested changes to the licensed endpoints and queue classifications
+    /// </summary>
+    public LicenseAmendments? CustomerLicenseAmendments { get; init; }
+
+    /// <summary>
     /// Information about the environment, ie ServicePulse version, Audit instances versipns etc
     /// </summary>
     public EnvironmentInformation EnvironmentInformation { get; set; }
@@ -211,4 +216,114 @@ public record DailyThroughput
 /// <param name="Transports"></param>
 public record AuditServicesData(Dictionary<string, int> Versions, Dictionary<string, int> Transports)
 {
+}
+
+/// <summary>
+/// Information, supplied by the customer, containing their suggested changes to the licensed endpoints and queue classifications
+/// </summary>
+public record LicenseAmendments
+{
+    /// <summary>
+    /// Information about amendments made to endpoints that were previously licensed
+    /// </summary>
+    public LicensedEndpointAmendment[] Endpoints { get; init; }
+
+    /// <summary>
+    /// A list of names for any endpoints that have been removed since the last license renewal
+    /// </summary>
+    public string[] RemovedEndpointNames { get; init; }
+
+    /// <summary>
+    /// A list of queues that have been marked as infrastructure since the last license renewal
+    /// </summary>
+    /// <remarks>
+    /// This list should only contain amendments on the last renewal, not the complete list of queues
+    /// </remarks>
+    public QueueIdentity[] InfrastructureQueues { get; init; }
+
+    /// <summary>
+    /// A list of queues that have been marked as excluded since the last license renewal
+    /// </summary>
+    /// <remarks>
+    /// This list should only contain amendments on the last renewal, not the complete list of queues
+    /// </remarks>
+    public QueueIdentity[] ExcludedQueues { get; init; }
+}
+
+/// <summary>
+/// Minimal information required to uniquely identify a queue within a report
+/// </summary>
+public record QueueIdentity
+{
+    /// <summary>
+    /// A hash of the queue name to support unique identification of queues across reports without exposing potentially sensitive information.
+    /// </summary>
+    /// <remarks>
+    /// This should be a one-way hash of the unmasked queue name.
+    /// </remarks>
+    public string NameHash { get; init; }
+
+    /// <summary>
+    /// A hash of the scope to support unique identification of queues across reports without exposing potentially sensitive information.
+    /// </summary>
+    /// <remarks>
+    /// This should be a one-way hash of the unmasked scope, if it exists.
+    /// </remarks>
+    public string? ScopeHash { get; init; }
+}
+
+/// <summary>
+/// Information about amendments made to an endpoints that was previously licensed, or information about a newly created endpoint since the last license renewal
+/// </summary>
+public record LicensedEndpointAmendment
+{
+    /// <summary>
+    /// What this endpoint was named in the previous license renewal, if it existed then
+    /// </summary>
+    public string? PreviousName { get; init; }
+
+    /// <summary>
+    /// A hash of the previous endpoint name to support unique identification across reports without exposing potentially sensitive information.
+    /// </summary>
+    /// <remarks>
+    /// This should be a one-way hash of the unmasked endpoint name.
+    /// </remarks>
+    public string? PreviousNameHash { get; init; }
+
+    /// <summary>
+    /// What this endpoint has been named by the user.
+    /// </summary>
+    /// <remarks>
+    /// If no change from last license renewal, this will be the same as PreviousName
+    /// </remarks>
+    public string CurrentName { get; init; }
+
+    /// <summary>
+    /// A hash of the endpoint name to support unique identification across reports without exposing potentially sensitive information.
+    /// </summary>
+    /// <remarks>
+    /// This should be a one-way hash of the unmasked endpoint name.
+    /// </remarks>
+    public string CurrentNameHash { get; init; }
+
+    /// <summary>
+    /// What the classification of this endpoint has been set to by the user
+    /// </summary>
+    public bool IsSendOnly { get; init; }
+
+    /// <summary>
+    /// Any queues that have been added to this endpoint since the last renewal
+    /// </summary>
+    /// <remarks>
+    /// This list should only contain amendments on the last renewal, not the complete list of queues
+    /// </remarks>
+    public QueueIdentity[] AmendedQueues { get; init; }
+
+    /// <summary>
+    /// Any queues that have been removed from this endpoint since the last renewal
+    /// </summary>
+    /// <remarks>
+    /// This list should only contain amendments on the last renewal, not the complete list of queues
+    /// </remarks>
+    public QueueIdentity[] RemovedQueues { get; init; }
 }
