@@ -18,9 +18,34 @@ namespace Particular.LicensingComponent.Report
         public Particular.LicensingComponent.Report.AuditServicesData AuditServicesData { get; set; }
         public System.Collections.Generic.Dictionary<string, string> EnvironmentData { get; set; }
     }
+    public class LicenseAmendments : System.IEquatable<Particular.LicensingComponent.Report.LicenseAmendments>
+    {
+        public LicenseAmendments() { }
+        public Particular.LicensingComponent.Report.LicensedEndpointAmendment[] Endpoints { get; init; }
+        public Particular.LicensingComponent.Report.QueueIdentity[] ExcludedQueues { get; init; }
+        public Particular.LicensingComponent.Report.QueueIdentity[] InfrastructureQueues { get; init; }
+        public string[] RemovedEndpointNames { get; init; }
+    }
+    public class LicensedEndpointAmendment : System.IEquatable<Particular.LicensingComponent.Report.LicensedEndpointAmendment>
+    {
+        public LicensedEndpointAmendment() { }
+        public Particular.LicensingComponent.Report.QueueIdentity[] AmendedQueues { get; init; }
+        public string CurrentName { get; init; }
+        public string CurrentNameHash { get; init; }
+        public bool IsSendOnly { get; init; }
+        public string? PreviousName { get; init; }
+        public string? PreviousNameHash { get; init; }
+        public Particular.LicensingComponent.Report.QueueIdentity[] RemovedQueues { get; init; }
+    }
     public class NoPrivateKeyException : System.Exception
     {
         public string ReportId { get; }
+    }
+    public class QueueIdentity : System.IEquatable<Particular.LicensingComponent.Report.QueueIdentity>
+    {
+        public QueueIdentity() { }
+        public string NameHash { get; init; }
+        public string? ScopeHash { get; init; }
     }
     public class QueueThroughput : System.IEquatable<Particular.LicensingComponent.Report.QueueThroughput>
     {
@@ -41,6 +66,7 @@ namespace Particular.LicensingComponent.Report
     public class Report : System.IEquatable<Particular.LicensingComponent.Report.Report>
     {
         public Report() { }
+        public Particular.LicensingComponent.Report.LicenseAmendments? CustomerLicenseAmendments { get; init; }
         public string CustomerName { get; init; }
         public System.DateTimeOffset EndTime { get; init; }
         public Particular.LicensingComponent.Report.EnvironmentInformation EnvironmentInformation { get; set; }
